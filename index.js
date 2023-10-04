@@ -22,8 +22,11 @@ app.use(bodyParser.json());
 
 // Routes
 app.get("/", (req, res) => {
-  Pergunta.findAll();
-  res.render("index");
+  Pergunta.findAll({ raw: true, order: [["id", "DESC"]] }).then((perguntas) => {
+    res.render("index", {
+      perguntas: perguntas,
+    });
+  });
 });
 
 app.get("/perguntar", (req, res) => {
@@ -36,12 +39,7 @@ app.post("/salvarpergunta", (req, res) => {
     title: title,
     description: description,
   }).then(() => {
-    res.send(`
-      <script>
-        alert('Sua pergunta foi salva com sucesso!');
-        window.location.href = '/';
-      </script>
-    `);
+    res.redirect("/");
   });
 });
 
