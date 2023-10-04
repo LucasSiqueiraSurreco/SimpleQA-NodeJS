@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
-import connection from "./database/database";
+import connection from "./database/database.js";
+import Pergunta from "./database/Pergunta.js";
 
 connection
   .authenticate()
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.get("/", (req, res) => {
+  Pergunta.findAll();
   res.render("index");
 });
 
@@ -30,7 +32,17 @@ app.get("/perguntar", (req, res) => {
 
 app.post("/salvarpergunta", (req, res) => {
   let { title, description } = req.body;
-  res.send(`Formulário recebido ${title} ${description}`);
+  Pergunta.create({
+    title: title,
+    description: description,
+  }).then(() => {
+    res.send(`
+      <script>
+        alert('Sua pergunta foi salva com sucesso!');
+        window.location.href = '/';
+      </script>
+    `);
+  });
 });
 
 app.listen(3333, () => {
