@@ -1,5 +1,14 @@
 import express from "express";
 import bodyParser from "body-parser";
+import connection from "./database/database";
+
+connection
+  .authenticate()
+  .then(() => {
+    console.log("Database connection established successfully!");
+  })
+  .catch((err) => console.log(err));
+
 const app = express();
 
 // Express view engine ejs
@@ -21,7 +30,6 @@ app.get("/perguntar", (req, res) => {
 
 app.post("/salvarpergunta", (req, res) => {
   let { title, description } = req.body;
-  console.log(title, description);
   res.send(`Formulário recebido ${title} ${description}`);
 });
 
