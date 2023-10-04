@@ -12,6 +12,10 @@ app.get("/perguntar", (req, res) => {
   res.render("perguntar");
 });
 
+app.post("/salvarpergunta", (req, res) => {
+  res.send("Formulário recebido");
+});
+
 app.listen(3333, () => {
   console.log("Running in http://localhost:3333");
 });
