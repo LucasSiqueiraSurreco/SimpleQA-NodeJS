@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import connection from "./database/database.js";
 import Pergunta from "./database/Pergunta.js";
+import Resposta from "./database/Resposta.js";
 
 connection
   .authenticate()
@@ -33,6 +34,21 @@ app.get("/perguntar", (req, res) => {
   res.render("perguntar");
 });
 
+app.get("/pergunta/:id", (req, res) => {
+  let { id } = req.params;
+  Pergunta.findOne({
+    where: { id: id },
+  }).then((pergunta) => {
+    if (pergunta != undefined) {
+      res.render("pergunta", {
+        pergunta: pergunta,
+      });
+    } else {
+      res.redirect("/");
+    }
+  });
+});
+
 app.post("/salvarpergunta", (req, res) => {
   let { title, description } = req.body;
   Pergunta.create({
@@ -43,6 +59,16 @@ app.post("/salvarpergunta", (req, res) => {
   });
 });
 
+app.post("/responder", (req, res) => {
+  let { corpo, perguntaId } = req.body;
+  Resposta.create({
+    corpo: corpo,
+    perguntaId: perguntaId,
+  }).then(() => {
+    res.redirect(`/pergunta/${perguntaId}`);
+  });
+});
+
 app.listen(3333, () => {
-  console.log("Running in http://localhost:3333");
+  console.log("Running in http://localhost:3333\n");
 });
