@@ -17,6 +17,10 @@
         <a href="/pergunta/<%= pergunta.id  %>"
           ><button class="btn btn-primary">Responder</button></a
         >
+        <form method="post" action="/responder/delete" style="display: inline">
+          <input type="hidden" name="id" value="<%= pergunta.id  %>" />
+          <button class="btn btn-danger">Deletar</button>
+        </form>
       </div>
     </div>
     <% }) %>

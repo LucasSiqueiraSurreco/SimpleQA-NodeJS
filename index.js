@@ -75,6 +75,28 @@ app.post("/responder", (req, res) => {
   });
 });
 
+app.post("/responder/delete", (req, res) => {
+  let { id } = req.body;
+  console.log("Received request to delete response with ID:", id);
+
+  if (id !== undefined && !isNaN(id)) {
+    Pergunta.destroy({
+      where: { id: id },
+    })
+      .then(() => {
+        console.log("Response deleted successfully.");
+        res.redirect("/"); // ou para a rota apropriada após excluir
+      })
+      .catch((error) => {
+        console.error("Error deleting response:", error);
+        res.redirect("/"); // ou para a rota de erro apropriada
+      });
+  } else {
+    console.error("Invalid ID received for response deletion.");
+    res.redirect("/"); // ou para a rota de erro apropriada
+  }
+});
+
 app.listen(3333, () => {
   console.log("Running in http://localhost:3333\n");
 });
